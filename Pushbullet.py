@@ -17,7 +17,7 @@ with open('pb_token.txt', 'r') as myfile:
 def clkNote():
     global nttop
     nttop = Tkinter.Toplevel(top)
-    nttop.attributes("-topmost", True)
+    nttop.lift()
     nttop.title("Send note")
 
     lblpu = Tkinter.Label(nttop, text="Send a note", fg="white", bg="green", font = ttlFont).grid(row=0, columnspan=2, sticky=Tkinter.W+Tkinter.E)
@@ -76,7 +76,7 @@ def clkPushRefr():
 
 ### SET UP GUI
 top = Tkinter.Tk()
-top.attributes("-topmost", True)
+top.lift()
 top.title("Pushbullet")
 
 ttlFont = tkFont.Font(family="Helvetica", size=30, weight="bold")
