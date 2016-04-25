@@ -89,8 +89,8 @@ fMain = Tkinter.Frame(top, bg="white", width=800, height=600).grid(row=4, column
 
 lblttFont = tkFont.Font(family="Helvetica", size=18, weight="bold")
 lblttlmn = Tkinter.Label(fMain, text="Recent pushes", font=lblttFont).grid(row=4,columnspan=1000,sticky=Tkinter.W+Tkinter.N)
-lblttlmn2 = Tkinter.Label(fMain, text="-------------------------------------------------------").grid(row=5,columnspan=1000,sticky=Tkinter.W+Tkinter.N)
-txtPushes = Tkinter.Text(fMain)
+lblttlmn2 = Tkinter.Label(fMain, text="--------------------------------------------------------------------------------------------------------").grid(row=5,columnspan=1000,sticky=Tkinter.W+Tkinter.N)
+txtPushes = Tkinter.Text(fMain, height=36, width=114)
 txtPushes.grid(row=6, columnspan=1000, sticky=Tkinter.W+Tkinter.N)
 
 
