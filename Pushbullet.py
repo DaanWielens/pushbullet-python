@@ -56,7 +56,7 @@ def clkDevsList():
     DevicesList = DevicesR['devices']
     nDev = len(DevicesR)
 
-    print DevicesList
+    #print DevicesList
     for i in range(0,nDev):
         txtDevices.insert(Tkinter.INSERT, DevicesList[i]['nickname'])
         txtDevices.insert(Tkinter.INSERT, "\n-----------------------------------\n")
@@ -73,6 +73,7 @@ def clkPushRefr():
     #print PushesR
 
     PushesList = PushesR['pushes']
+    PushesList = sorted(PushesList, key=lambda k: k.get('created',0), reverse=True)
     nPushes = len(PushesList)
 
     txtPushes.delete("1.0",Tkinter.END)
