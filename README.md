@@ -4,6 +4,7 @@ A python version of a Pushbullet application.
 Current features:
 * list received pushes
 * send notes to self
+* list (active) devices
 
 To run, simply type
 ```bash
