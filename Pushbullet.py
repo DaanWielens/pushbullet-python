@@ -21,15 +21,16 @@ def clkNote():
     nttop.title("Send note")
 
     lblpu = Tkinter.Label(nttop, text="Send a note", fg="white", bg="green", font = ttlFont).grid(row=0, columnspan=2, sticky=Tkinter.W+Tkinter.E)
-    lbttl = Tkinter.Label(nttop,text="Title:").grid(row=1)
+    fLine = Tkinter.Frame(nttop, bg="black", width=290, height=1).grid(row=1, columnspan=2)
+    lbttl = Tkinter.Label(nttop,text="Title:").grid(row=2)
     global ettl
     ettl = Tkinter.Entry(nttop,exportselection=0)
-    ettl.grid(row=1,column=1)
-    lbmsg = Tkinter.Label(nttop,text="Message:").grid(row=2)
+    ettl.grid(row=2,column=1)
+    lbmsg = Tkinter.Label(nttop,text="Message:").grid(row=3)
     global emsg
     emsg = Tkinter.Entry(nttop,exportselection=0)
-    emsg.grid(row=2,column=1)
-    btnSendNote = Tkinter.Button(nttop, text="Send note", command=clkSendNote).grid(row=3)
+    emsg.grid(row=3,column=1)
+    btnSendNote = Tkinter.Button(nttop, text="Send note", command=clkSendNote).grid(row=4)
 
 def clkSendNote():
     NoteUrl = "https://api.pushbullet.com/v2/pushes"
@@ -40,8 +41,33 @@ def clkSendNote():
     #print NoteR
     nttop.destroy()
 
+def clkDevsList():
+    devtop = Tkinter.Toplevel(top)
+    devtop.lift()
+    devtop.title("Send note")
+    lblpu = Tkinter.Label(devtop, text="Devices", fg="white", bg="green", font = ttlFont).grid(row=0, sticky=Tkinter.W+Tkinter.E)
+    fLine = Tkinter.Frame(devtop, bg="black", width=500, height=1).grid(row=1)
+    lbttl = Tkinter.Label(devtop,text="List of devices:").grid(row=2, sticky=Tkinter.W)
+    lbttl = Tkinter.Label(devtop,text="---------------------------------------------------------------------").grid(row=3, sticky=Tkinter.W)
+    txtDevices = Tkinter.Text(devtop, height=20, width=65)
+    txtDevices.grid(row=4, sticky=Tkinter.W)
+
+    DevicesR = requests.get("https://api.pushbullet.com/v2/devices?active=true", auth=(TOKEN, '')).json()
+    DevicesList = DevicesR['devices']
+    nDev = len(DevicesR)
+
+    print DevicesList
+    for i in range(0,nDev):
+        txtDevices.insert(Tkinter.INSERT, DevicesList[i]['nickname'])
+        txtDevices.insert(Tkinter.INSERT, "\n-----------------------------------\n")
+        txtDevices.insert(Tkinter.INSERT, "Identifier:\n")
+        txtDevices.insert(Tkinter.INSERT, DevicesList[i]['iden'])
+        txtDevices.insert(Tkinter.INSERT, "\nModel:\n")
+        txtDevices.insert(Tkinter.INSERT, DevicesList[i]['model'])
+        txtDevices.insert(Tkinter.INSERT, "\n\n")
+
+
 def clkPushRefr():
-    PushesData = dict(active="true")
     global PushesR
     PushesR = requests.get("https://api.pushbullet.com/v2/pushes?active=true", auth=(TOKEN, '')).json()
     #print PushesR
@@ -81,15 +107,16 @@ top.title("Pushbullet")
 
 ttlFont = tkFont.Font(family="Helvetica", size=30, weight="bold")
 ttl = Tkinter.Label(top, text="Pushbullet", fg="white", bg="green", font=ttlFont).grid(row=0, columnspan=1000, sticky = Tkinter.W+Tkinter.E)
-fLine = Tkinter.Frame(top, bg="black", width=800, height=2).grid(row=1, columnspan=1000)
+fLine = Tkinter.Frame(top, bg="black", width=810, height=1).grid(row=1, columnspan=1000)
 btnNote = Tkinter.Button(top, text="Send note", command=clkNote).grid(row=2,column=0, sticky = Tkinter.W)
 btnRefr = Tkinter.Button(top, text="Refresh pushes", command=clkPushRefr).grid(row=2, column=3, sticky = Tkinter.W)
-fLine2 = Tkinter.Frame(top, bg="black", width=800, height=2).grid(row=3, columnspan=1000)
-fMain = Tkinter.Frame(top, bg="white", width=800, height=600).grid(row=4, columnspan=1000, rowspan=5000)
+btnDevs = Tkinter.Button(top, text="Devices", command=clkDevsList).grid(row=2, column=4, sticky = Tkinter.W)
+fLine2 = Tkinter.Frame(top, bg="black", width=810, height=1).grid(row=3, columnspan=1000)
+fMain = Tkinter.Frame(top, bg="white", width=810, height=600).grid(row=4, columnspan=1000, rowspan=5000)
 
 lblttFont = tkFont.Font(family="Helvetica", size=18, weight="bold")
 lblttlmn = Tkinter.Label(fMain, text="Recent pushes", font=lblttFont).grid(row=4,columnspan=1000,sticky=Tkinter.W+Tkinter.N)
-lblttlmn2 = Tkinter.Label(fMain, text="--------------------------------------------------------------------------------------------------------").grid(row=5,columnspan=1000,sticky=Tkinter.W+Tkinter.N)
+lblttlmn2 = Tkinter.Label(fMain, text="----------------------------------------------------------------------------------------------------------------------------").grid(row=5,columnspan=1000,sticky=Tkinter.W+Tkinter.N)
 txtPushes = Tkinter.Text(fMain, height=36, width=114)
 txtPushes.grid(row=6, columnspan=1000, sticky=Tkinter.W+Tkinter.N)
 
