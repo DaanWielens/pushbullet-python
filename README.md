@@ -5,6 +5,7 @@ Current features:
 * list received pushes
 * send notes to self
 * list (active) devices
+* list (active) chats
 
 To run, simply type
 ```bash
