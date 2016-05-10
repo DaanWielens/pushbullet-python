@@ -20,7 +20,7 @@ def clkNote():
     nttop.lift()
     nttop.title("Send note")
 
-    lblpu = Tkinter.Label(nttop, text="Send a note", fg="white", bg="green", font = ttlFont).grid(row=0, columnspan=2, sticky=Tkinter.W+Tkinter.E)
+    lblpu = Tkinter.Label(nttop, text="Send a note", fg="white", bg="#4fb16a", font = ttlFont).grid(row=0, columnspan=2, sticky=Tkinter.W+Tkinter.E)
     fLine = Tkinter.Frame(nttop, bg="black", width=290, height=1).grid(row=1, columnspan=2)
     lbttl = Tkinter.Label(nttop,text="Title:").grid(row=2)
     global ettl
@@ -41,11 +41,58 @@ def clkSendNote():
     #print NoteR
     nttop.destroy()
 
+def clkFrnd():
+    global frtop
+    frtop = Tkinter.Toplevel(top)
+    frtop.lift()
+    frtop.title("Send note to friend")
+
+    lblpu = Tkinter.Label(frtop, text="Send note to friend", fg="white", bg="#4fb16a", font = ttlFont).grid(row=0, columnspan=2, sticky=Tkinter.W+Tkinter.E)
+    fLine = Tkinter.Frame(frtop, bg="black", width=290, height=1).grid(row=1, columnspan=2)
+
+    global frndList
+    frndR = requests.get("https://api.pushbullet.com/v2/chats?active=true", auth=(TOKEN, '')).json()
+    frndList = frndR['chats']
+    nFrnd = len(frndList)
+    global frndNames
+    frndNames = []
+
+    for i in range(0,nFrnd):
+        frndNames.append(frndList[i]['with']['name'])
+
+    lbfr = Tkinter.Label(frtop,text="Friend:").grid(row=2)
+    global frnd
+    frnd = Tkinter.StringVar(frtop)
+    frnd.set(frndNames[0])
+    option = apply(Tkinter.OptionMenu, (frtop, frnd) + tuple(frndNames))
+    option.grid(row=2, column=1)
+
+    lbttl = Tkinter.Label(frtop,text="Title:").grid(row=3)
+    global frttl
+    frttl = Tkinter.Entry(frtop,exportselection=0)
+    frttl.grid(row=3,column=1)
+    lbmsg = Tkinter.Label(frtop,text="Message:").grid(row=4)
+    global frmsg
+    frmsg = Tkinter.Entry(frtop,exportselection=0)
+    frmsg.grid(row=4,column=1)
+    btnSendNote = Tkinter.Button(frtop, text="Send note", command=clkSendFrnd).grid(row=5)
+
+def clkSendFrnd():
+    tgtFrnd = frnd.get()
+    posFrnd = frndNames.index(tgtFrnd)
+    targetFrnd = frndList[posFrnd]['with']['email']
+    NoteUrl = "https://api.pushbullet.com/v2/pushes"
+    NoteTtl = frttl.get()
+    NoteMsg = frmsg.get()
+    NoteData = dict(email=targetFrnd, type="note", title=NoteTtl, body=NoteMsg)
+    NoteR = requests.post(NoteUrl, json=NoteData, auth=(TOKEN, '')).json()
+    frtop.destroy()
+
 def clkDevsList():
     devtop = Tkinter.Toplevel(top)
     devtop.lift()
     devtop.title("Devices")
-    lblpu = Tkinter.Label(devtop, text="Devices", fg="white", bg="green", font = ttlFont).grid(row=0, sticky=Tkinter.W+Tkinter.E)
+    lblpu = Tkinter.Label(devtop, text="Devices", fg="white", bg="#4fb16a", font = ttlFont).grid(row=0, sticky=Tkinter.W+Tkinter.E)
     fLine = Tkinter.Frame(devtop, bg="black", width=500, height=1).grid(row=1)
     lbttl = Tkinter.Label(devtop,text="List of devices:").grid(row=2, sticky=Tkinter.W)
     lbttl = Tkinter.Label(devtop,text="---------------------------------------------------------------------").grid(row=3, sticky=Tkinter.W)
@@ -70,7 +117,7 @@ def clkCntsList():
     cnttop = Tkinter.Toplevel(top)
     cnttop.lift()
     cnttop.title("Contacts")
-    lblpu = Tkinter.Label(cnttop, text="Devices", fg="white", bg="green", font = ttlFont).grid(row=0, sticky=Tkinter.W+Tkinter.E)
+    lblpu = Tkinter.Label(cnttop, text="Devices", fg="white", bg="#4fb16a", font = ttlFont).grid(row=0, sticky=Tkinter.W+Tkinter.E)
     fLine = Tkinter.Frame(cnttop, bg="black", width=500, height=1).grid(row=1)
     lbttl = Tkinter.Label(cnttop,text="List of contacts:").grid(row=2, sticky=Tkinter.W)
     lbttl = Tkinter.Label(cnttop,text="---------------------------------------------------------------------").grid(row=3, sticky=Tkinter.W)
@@ -105,9 +152,20 @@ def clkPushRefr():
         pType = PushesList[i]['type']
         txtPushes.insert(Tkinter.INSERT, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(PushesList[i]['created'])))
         txtPushes.insert(Tkinter.INSERT, "\n---------------------------------------------------------------------------------------------------------\n")
+        if 'sender_name' in PushesList[i]:
+            if PushesList[i]['direction'] == "incoming":
+                txtPushes.insert(Tkinter.INSERT,"Push received from:\n")
+                txtPushes.insert(Tkinter.INSERT, PushesList[i]['sender_name'])
+                txtPushes.insert(Tkinter.INSERT, "\n")
+            elif PushesList[i]['direction'] == "outgoing":
+                txtPushes.insert(Tkinter.INSERT,"Push sent to:\n")
+                txtPushes.insert(Tkinter.INSERT, PushesList[i]['receiver_email'])
+                txtPushes.insert(Tkinter.INSERT, "\n")
+
         if pType == "note":
-            txtPushes.insert(Tkinter.INSERT, "Title:\n")
-            txtPushes.insert(Tkinter.INSERT, PushesList[i]['title'])
+            if 'title' in PushesList[i]:
+                txtPushes.insert(Tkinter.INSERT, "Title:\n")
+                txtPushes.insert(Tkinter.INSERT, PushesList[i]['title'])
             txtPushes.insert(Tkinter.INSERT, "\nMessage:\n")
             txtPushes.insert(Tkinter.INSERT, PushesList[i]['body'])
 
@@ -130,12 +188,13 @@ top.lift()
 top.title("Pushbullet")
 
 ttlFont = tkFont.Font(family="Helvetica", size=30, weight="bold")
-ttl = Tkinter.Label(top, text="Pushbullet", fg="white", bg="green", font=ttlFont).grid(row=0, columnspan=1000, sticky = Tkinter.W+Tkinter.E)
+ttl = Tkinter.Label(top, text="Pushbullet", fg="white", bg="#4fb16a", font=ttlFont).grid(row=0, columnspan=1000, sticky = Tkinter.W+Tkinter.E)
 fLine = Tkinter.Frame(top, bg="black", width=810, height=1).grid(row=1, columnspan=1000)
 btnNote = Tkinter.Button(top, text="Send note", command=clkNote).grid(row=2,column=0, sticky = Tkinter.W)
 btnRefr = Tkinter.Button(top, text="Refresh pushes", command=clkPushRefr).grid(row=2, column=3, sticky = Tkinter.W)
 btnDevs = Tkinter.Button(top, text="Devices", command=clkDevsList).grid(row=2, column=4, sticky = Tkinter.W)
 btnCnts = Tkinter.Button(top, text="Contacts", command=clkCntsList).grid(row=2, column=5, sticky = Tkinter.W)
+btnFrnd = Tkinter.Button(top, text="Send note to friend", command=clkFrnd).grid(row=2, column=6, sticky=Tkinter.W)
 fLine2 = Tkinter.Frame(top, bg="black", width=810, height=1).grid(row=3, columnspan=1000)
 fMain = Tkinter.Frame(top, bg="white", width=810, height=600).grid(row=4, columnspan=1000, rowspan=5000)
 
@@ -145,8 +204,6 @@ lblttlmn2 = Tkinter.Label(fMain, text="-----------------------------------------
 txtPushes = Tkinter.Text(fMain, height=36, width=114)
 txtPushes.grid(row=6, columnspan=1000, sticky=Tkinter.W+Tkinter.N)
 
-
 clkPushRefr()
-
 
 top.mainloop()
