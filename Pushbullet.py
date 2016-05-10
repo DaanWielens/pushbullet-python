@@ -44,7 +44,7 @@ def clkSendNote():
 def clkDevsList():
     devtop = Tkinter.Toplevel(top)
     devtop.lift()
-    devtop.title("Send note")
+    devtop.title("Devices")
     lblpu = Tkinter.Label(devtop, text="Devices", fg="white", bg="green", font = ttlFont).grid(row=0, sticky=Tkinter.W+Tkinter.E)
     fLine = Tkinter.Frame(devtop, bg="black", width=500, height=1).grid(row=1)
     lbttl = Tkinter.Label(devtop,text="List of devices:").grid(row=2, sticky=Tkinter.W)
@@ -54,7 +54,7 @@ def clkDevsList():
 
     DevicesR = requests.get("https://api.pushbullet.com/v2/devices?active=true", auth=(TOKEN, '')).json()
     DevicesList = DevicesR['devices']
-    nDev = len(DevicesR)
+    nDev = len(DevicesList)
 
     #print DevicesList
     for i in range(0,nDev):
@@ -66,6 +66,29 @@ def clkDevsList():
         txtDevices.insert(Tkinter.INSERT, DevicesList[i]['model'])
         txtDevices.insert(Tkinter.INSERT, "\n\n")
 
+def clkCntsList():
+    cnttop = Tkinter.Toplevel(top)
+    cnttop.lift()
+    cnttop.title("Contacts")
+    lblpu = Tkinter.Label(cnttop, text="Devices", fg="white", bg="green", font = ttlFont).grid(row=0, sticky=Tkinter.W+Tkinter.E)
+    fLine = Tkinter.Frame(cnttop, bg="black", width=500, height=1).grid(row=1)
+    lbttl = Tkinter.Label(cnttop,text="List of contacts:").grid(row=2, sticky=Tkinter.W)
+    lbttl = Tkinter.Label(cnttop,text="---------------------------------------------------------------------").grid(row=3, sticky=Tkinter.W)
+    txtContacts = Tkinter.Text(cnttop, height=20, width=65)
+    txtContacts.grid(row=4, sticky=Tkinter.W)
+
+    ContactsR = requests.get("https://api.pushbullet.com/v2/chats?active=true", auth=(TOKEN, '')).json()
+    ContactsList = ContactsR['chats']
+    nCnts = len(ContactsList)
+
+    for i in range(0,nCnts):
+        txtContacts.insert(Tkinter.INSERT, ContactsList[i]['with']['name'])
+        txtContacts.insert(Tkinter.INSERT, "\n-----------------------------------\n")
+        txtContacts.insert(Tkinter.INSERT, "Identifier:\n")
+        txtContacts.insert(Tkinter.INSERT, ContactsList[i]['iden'])
+        txtContacts.insert(Tkinter.INSERT, "\nE-mail:\n")
+        txtContacts.insert(Tkinter.INSERT, ContactsList[i]['with']['email'])
+        txtContacts.insert(Tkinter.INSERT, "\n\n")
 
 def clkPushRefr():
     global PushesR
@@ -81,7 +104,7 @@ def clkPushRefr():
 
         pType = PushesList[i]['type']
         txtPushes.insert(Tkinter.INSERT, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(PushesList[i]['created'])))
-        txtPushes.insert(Tkinter.INSERT, "\n-----------------------------------\n")
+        txtPushes.insert(Tkinter.INSERT, "\n---------------------------------------------------------------------------------------------------------\n")
         if pType == "note":
             txtPushes.insert(Tkinter.INSERT, "Title:\n")
             txtPushes.insert(Tkinter.INSERT, PushesList[i]['title'])
@@ -112,6 +135,7 @@ fLine = Tkinter.Frame(top, bg="black", width=810, height=1).grid(row=1, columnsp
 btnNote = Tkinter.Button(top, text="Send note", command=clkNote).grid(row=2,column=0, sticky = Tkinter.W)
 btnRefr = Tkinter.Button(top, text="Refresh pushes", command=clkPushRefr).grid(row=2, column=3, sticky = Tkinter.W)
 btnDevs = Tkinter.Button(top, text="Devices", command=clkDevsList).grid(row=2, column=4, sticky = Tkinter.W)
+btnCnts = Tkinter.Button(top, text="Contacts", command=clkCntsList).grid(row=2, column=5, sticky = Tkinter.W)
 fLine2 = Tkinter.Frame(top, bg="black", width=810, height=1).grid(row=3, columnspan=1000)
 fMain = Tkinter.Frame(top, bg="white", width=810, height=600).grid(row=4, columnspan=1000, rowspan=5000)
 
