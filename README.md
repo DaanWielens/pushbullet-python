@@ -1,5 +1,11 @@
 # pushbullet-python
-A python version of a Pushbullet application.
+This repo contains all Python-based Pushbullet scripts.
+
+###### Dependencies for all scripts
+Make sure that a file `pb_token.txt` is in the same folder as the python script. This textfile needs to contain your pushbullet token (no encoding or whatever, just plain text).
+
+###Pushbullet.py
+A GUI version of the Pushbullet application.
 
 Current features:
 * list received pushes
@@ -12,7 +18,14 @@ To run, simply type
 python Pushbullet.py
 ```
 
-Make sure that a file pb_token.txt is in the same folder as the python script. This textfile needs to contain your pushbullet token (no encoding, just plain text).
+###pbcli.py
+Python module that can be used in any Python script to send Pushbullet notes easily. 
+
+Usage:
+```python
+import pbcli
+pbcli.note(title,message)
+```
 
 
 
