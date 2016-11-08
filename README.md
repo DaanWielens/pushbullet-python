@@ -19,13 +19,20 @@ python Pushbullet.py
 ```
 
 ###pbcli.py
-Python module that can be used in any Python script to send Pushbullet notes easily. 
+Python module that can be used in any Python script to send Pushbullet notes or files easily.
 
-Usage:
-```python
+*Note: pbcli can also be used as a standalone script!*
+
+Usage (as a function):
+```
+python
 import pbcli
-pbcli.note(title,message)
+pbcli.note(title, message)
+pbcli.file(filename, pathtofile, message)
 ```
 
-
-
+Usage (standalone):
+```
+python -n title message
+python -f filename pathtofile message
+```
