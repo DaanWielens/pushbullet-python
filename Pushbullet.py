@@ -117,7 +117,7 @@ def clkCntsList():
     cnttop = Tkinter.Toplevel(top)
     cnttop.lift()
     cnttop.title("Contacts")
-    lblpu = Tkinter.Label(cnttop, text="Devices", fg="white", bg="#4fb16a", font = ttlFont).grid(row=0, sticky=Tkinter.W+Tkinter.E)
+    lblpu = Tkinter.Label(cnttop, text="Contacts", fg="white", bg="#4fb16a", font = ttlFont).grid(row=0, sticky=Tkinter.W+Tkinter.E)
     fLine = Tkinter.Frame(cnttop, bg="black", width=500, height=1).grid(row=1)
     lbttl = Tkinter.Label(cnttop,text="List of contacts:").grid(row=2, sticky=Tkinter.W)
     lbttl = Tkinter.Label(cnttop,text="---------------------------------------------------------------------").grid(row=3, sticky=Tkinter.W)

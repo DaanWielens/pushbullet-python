@@ -49,11 +49,42 @@ def pfile(fname,fpath,msg):
     data = dict(type="file", body=msg, file_name=fname, file_type = rf_type, file_url = rf_durl)
     freq = requests.post(url, json=data, auth=(TOKEN, '')).json()
 
-if len(sys.argv) == 1:
-    print('Usage:\n - Send a note: python pbcli.py -n title message\n - Send a file: python pbcli.py -f filename /path/to/file message')
-elif (sys.argv[1] == '-n') and (len(sys.argv) == 4):
-    note(sys.argv[2],sys.argv[3])
-elif (sys.argv[1] == '-f') and (len(sys.argv) == 5):
-    pfile(sys.argv[2], sys.argv[3], sys.argv[4])
+# Function to list active devices
+def listdevices():
+    url = "https://api.pushbullet.com/v2/devices?active=true"
+    ldreq = requests.get(url, auth=(TOKEN, '')).json()
+    Devices = ldreq['devices']
+    for i in range(0,len(Devices)):
+        print(Devices[i]['iden'] + ' ' + Devices[i]['nickname'])
+
+# Function to send a note to a specific device
+def notetodevice(ttl,msg,iden):
+    url = "https://api.pushbullet.com/v2/pushes"
+    data = dict(type="note", title=ttl, body=msg, device_iden=iden)
+    nreq = requests.post(url, json=data, auth=(TOKEN, '')).json()
+
+# Standalone python script:
+correct_input = 0
+if len(sys.argv) > 1:
+    if '-' in sys.argv[1]:
+        if (sys.argv[1] == '-n') and (len(sys.argv) == 4):
+            note(sys.argv[2], sys.argv[3])
+        if (sys.argv[1] == '-f') and (len(sys.argv) == 5):
+            pfile(sys.argv[2], sys.argv[3], sys.argv[4])
+        if (sys.argv[1] == '-l') and (len(sys.argv) == 2):
+            listdevices()
+        if (sys.argv[1] == '-d') and (len(sys.argv) == 5):
+            notetodevice(sys.argv[2], sys.argv[3], sys.argv[4])
+        else:
+            correct_input = 1
 else:
-    print('Usage:\n - Send a note: python pbcli.py -n title message\n - Send a file: python pbcli.py -f filename /path/to/file message')
+    correct_input = 1
+
+if correct_input == 1:
+    print('\nPushbullet Command Line Interface - Standalone usage:')
+    print('----------------------------------------------------------------------')
+    print('Send a note:         python pbcli.py -n title message')
+    print('Send a file:         python pbcli.py -f filename /path/to/file message')
+    print('List active devices: python pbcli.py -l')
+    print('Send note to device: python pbcli.py -d title message device_identifier')
+    print('')
