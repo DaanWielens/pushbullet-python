@@ -2,7 +2,7 @@
 This repo contains all Python-based Pushbullet scripts.
 
 ###### Dependencies for all scripts
-Make sure that a file `pb_token.txt` is in the same folder as the python script. This textfile needs to contain your pushbullet token (no encoding or whatever, just plain text).
+Make sure that a file `pb_token.txt` is in the same folder as the python script. This textfile needs to contain your pushbullet token (the file just contains the token, no line breaks or any other text).
 
 ###Pushbullet.py
 A GUI version of the Pushbullet application.
