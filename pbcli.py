@@ -69,11 +69,11 @@ if len(sys.argv) > 1:
     if '-' in sys.argv[1]:
         if (sys.argv[1] == '-n') and (len(sys.argv) == 4):
             note(sys.argv[2], sys.argv[3])
-        if (sys.argv[1] == '-f') and (len(sys.argv) == 5):
+        elif (sys.argv[1] == '-f') and (len(sys.argv) == 5):
             pfile(sys.argv[2], sys.argv[3], sys.argv[4])
-        if (sys.argv[1] == '-l') and (len(sys.argv) == 2):
+        elif (sys.argv[1] == '-l') and (len(sys.argv) == 2):
             listdevices()
-        if (sys.argv[1] == '-d') and (len(sys.argv) == 5):
+        elif (sys.argv[1] == '-d') and (len(sys.argv) == 5):
             notetodevice(sys.argv[2], sys.argv[3], sys.argv[4])
         else:
             correct_input = 1
