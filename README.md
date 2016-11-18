@@ -25,7 +25,9 @@ Current features:
 * Send notes to self (all devices)
 * Send file to self
 * List active devices
-* Send note to a specific device (requires `device_iden` which can be retrieved by running the `listdevices()` module)
+* Send note to a specific device (requires `device_iden` which can be retrieved by running the `listdevices` module)
+* List contacts
+* Send note to a specific contact (requires `email` which can be retrieved by running the `listcontacts` module)
 
 *Note: pbcli can be imported as a module or can used as a standalone script!*
 
@@ -37,6 +39,8 @@ pbcli.note(title, message)
 pbcli.file(filename, pathtofile, message)
 pbcli.listdevices()
 pbcli.notetodevice(title, message, device_identifier)
+pbcli.listcontacts()
+pbcli.notetocontact(title, message, email)
 ```
 
 Usage (standalone):
@@ -45,4 +49,6 @@ python pbcli.py -n title message
 python pbcli.py -f filename pathtofile message
 python pbcli.py -l
 python pbcli.py -d title message device_identifier
+python pbcli.py -c
+python pbcli.py -m title message email
 ```

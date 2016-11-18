@@ -55,12 +55,26 @@ def listdevices():
     ldreq = requests.get(url, auth=(TOKEN, '')).json()
     Devices = ldreq['devices']
     for i in range(0,len(Devices)):
-        print(Devices[i]['iden'] + ' ' + Devices[i]['nickname'])
+        print(Devices[i]['iden'] + ' : ' + Devices[i]['nickname'])
 
 # Function to send a note to a specific device
 def notetodevice(ttl,msg,iden):
     url = "https://api.pushbullet.com/v2/pushes"
     data = dict(type="note", title=ttl, body=msg, device_iden=iden)
+    nreq = requests.post(url, json=data, auth=(TOKEN, '')).json()
+
+# Function to list contacts
+def listcontacts():
+    url = "https://api.pushbullet.com/v2/chats?active=true"
+    lfreq = requests.get(url, auth=(TOKEN, '')).json()
+    Contacts = lfreq['chats']
+    for i in range(0,len(Contacts)):
+        print(Contacts[i]['with']['email'] + ' : ' + Contacts[i]['with']['name'])
+
+# Function to send a note to a specific contact
+def notetocontact(ttl,msg,email):
+    url = "https://api.pushbullet.com/v2/pushes"
+    data = dict(type="note", title=ttl, body=msg, email=email)
     nreq = requests.post(url, json=data, auth=(TOKEN, '')).json()
 
 # Standalone python script:
@@ -75,6 +89,10 @@ if len(sys.argv) > 1:
             listdevices()
         elif (sys.argv[1] == '-d') and (len(sys.argv) == 5):
             notetodevice(sys.argv[2], sys.argv[3], sys.argv[4])
+        elif (sys.argv[1] == '-c') and (len(sys.argv) == 2):
+            listcontacts()
+        elif (sys.arvg[1] == '-m') and (len(sys.argv) == 5):
+            notetocontact(sys.argv[2], sys.argv[3], sys.argv[4])
         else:
             correct_input = 1
 else:
@@ -83,8 +101,10 @@ else:
 if correct_input == 1:
     print('\nPushbullet Command Line Interface - Standalone usage:')
     print('----------------------------------------------------------------------')
-    print('Send a note:         python pbcli.py -n title message')
-    print('Send a file:         python pbcli.py -f filename /path/to/file message')
-    print('List active devices: python pbcli.py -l')
-    print('Send note to device: python pbcli.py -d title message device_identifier')
+    print('Send a note          : python pbcli.py -n title message')
+    print('Send a file          : python pbcli.py -f filename /path/to/file message')
+    print('List active devices  : python pbcli.py -l')
+    print('Send note to device  : python pbcli.py -d title message device_identifier')
+    print('List contacts        : python pbcli.py -c')
+    print('Send note to contact : python pbcli.py -m title message email')
     print('')
