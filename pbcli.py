@@ -22,11 +22,11 @@ def pfile(fname,fpath,msg):
     # First request authorization to upload a file
     url = "https://api.pushbullet.com/v2/upload-request"
     ext = fpath.split('.')[-1]
-    if ext == 'jpg':
+    if ext.lower() == 'jpg':
         f_type = 'image/jpeg'
-    elif ext == 'png':
+    elif ext.lower() == 'png':
         f_type = 'image/png'
-    elif ext == 'pdf':
+    elif ext.lower() == 'pdf':
         f_type = 'application/pdf'
     else:
         print('Supported file types:\njpg, png, pdf')
@@ -79,6 +79,7 @@ def notetocontact(ttl,msg,email):
 
 # Standalone python script:
 correct_input = 0
+
 if len(sys.argv) > 1:
     if '-' in sys.argv[1]:
         if (sys.argv[1] == '-n') and (len(sys.argv) == 4):
@@ -91,7 +92,7 @@ if len(sys.argv) > 1:
             notetodevice(sys.argv[2], sys.argv[3], sys.argv[4])
         elif (sys.argv[1] == '-c') and (len(sys.argv) == 2):
             listcontacts()
-        elif (sys.arvg[1] == '-m') and (len(sys.argv) == 5):
+        elif (sys.argv[1] == '-m') and (len(sys.argv) == 5):
             notetocontact(sys.argv[2], sys.argv[3], sys.argv[4])
         else:
             correct_input = 1
