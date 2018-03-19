@@ -78,34 +78,38 @@ def notetocontact(ttl,msg,email):
     nreq = requests.post(url, json=data, auth=(TOKEN, '')).json()
 
 # Standalone python script:
-correct_input = 0
+def main():
+    correct_input = 0
 
-if len(sys.argv) > 1:
-    if '-' in sys.argv[1]:
-        if (sys.argv[1] == '-n') and (len(sys.argv) == 4):
-            note(sys.argv[2], sys.argv[3])
-        elif (sys.argv[1] == '-f') and (len(sys.argv) == 5):
-            pfile(sys.argv[2], sys.argv[3], sys.argv[4])
-        elif (sys.argv[1] == '-l') and (len(sys.argv) == 2):
-            listdevices()
-        elif (sys.argv[1] == '-d') and (len(sys.argv) == 5):
-            notetodevice(sys.argv[2], sys.argv[3], sys.argv[4])
-        elif (sys.argv[1] == '-c') and (len(sys.argv) == 2):
-            listcontacts()
-        elif (sys.argv[1] == '-m') and (len(sys.argv) == 5):
-            notetocontact(sys.argv[2], sys.argv[3], sys.argv[4])
-        else:
-            correct_input = 1
-else:
-    correct_input = 1
+    if len(sys.argv) > 1:
+        if '-' in sys.argv[1]:
+            if (sys.argv[1] == '-n') and (len(sys.argv) == 4):
+                note(sys.argv[2], sys.argv[3])
+            elif (sys.argv[1] == '-f') and (len(sys.argv) == 5):
+                pfile(sys.argv[2], sys.argv[3], sys.argv[4])
+            elif (sys.argv[1] == '-l') and (len(sys.argv) == 2):
+                listdevices()
+            elif (sys.argv[1] == '-d') and (len(sys.argv) == 5):
+                notetodevice(sys.argv[2], sys.argv[3], sys.argv[4])
+            elif (sys.argv[1] == '-c') and (len(sys.argv) == 2):
+                listcontacts()
+            elif (sys.argv[1] == '-m') and (len(sys.argv) == 5):
+                notetocontact(sys.argv[2], sys.argv[3], sys.argv[4])
+            else:
+                correct_input = 1
+    else:
+        correct_input = 1
 
-if correct_input == 1:
-    print('\nPushbullet Command Line Interface - Standalone usage:')
-    print('----------------------------------------------------------------------')
-    print('Send a note          : python pbcli.py -n title message')
-    print('Send a file          : python pbcli.py -f filename /path/to/file message')
-    print('List active devices  : python pbcli.py -l')
-    print('Send note to device  : python pbcli.py -d title message device_identifier')
-    print('List contacts        : python pbcli.py -c')
-    print('Send note to contact : python pbcli.py -m title message email')
-    print('')
+    if correct_input == 1:
+        print('\nPushbullet Command Line Interface - Standalone usage:')
+        print('----------------------------------------------------------------------')
+        print('Send a note          : python pbcli.py -n title message')
+        print('Send a file          : python pbcli.py -f filename /path/to/file message')
+        print('List active devices  : python pbcli.py -l')
+        print('Send note to device  : python pbcli.py -d title message device_identifier')
+        print('List contacts        : python pbcli.py -c')
+        print('Send note to contact : python pbcli.py -m title message email')
+        print('')
+
+if __name__ == "__main__":
+    main()
